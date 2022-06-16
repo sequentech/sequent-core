@@ -1,11 +1,12 @@
 // SPDX-FileCopyrightText: 2022 Felix Robles <felix@sequentech.io>
 //
 // SPDX-License-Identifier: AGPL-3.0-only
-#[macro_use]
-extern crate cfg_if;
 
-mod util;
-mod ballot;
+pub fn sum(a: u16, b: u16) -> u16 {
+    a + b
+}
 
-#[cfg(feature = "wasm")]
-pub mod wasm;
+#[test]
+fn it_works() {
+    assert_eq!(sum(2, 2), 4);
+}
