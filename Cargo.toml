@@ -25,6 +25,10 @@ web-sys = { version = "0.3.4", features = ['Performance'], optional = true}
 cfg-if = "1.0.0"
 # error logging
 console_error_panic_hook = "0.1.7"
+# aes
+ed25519-dalek = {version = "1", features = ["serde"]}
+# hex
+hex = "0.4"
 
 [features]
 wasmtest = ["wasm", "dep:web-sys"]

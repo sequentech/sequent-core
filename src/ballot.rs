@@ -1,7 +1,5 @@
+use ed25519_dalek::{Digest, Sha512};
 use serde::{Deserialize, Serialize};
-
-#[cfg(test)]
-use std::fs;
 
 #[derive(Serialize, Deserialize)]
 pub struct Ballot {
@@ -106,9 +104,29 @@ pub enum Category {
     CandidaturasNoAgrupadas,
 }
 
-#[test]
-fn parse_ballot() {
-    let contents =
-        fs::read_to_string("fixtures/ballot.json").expect("Something went wrong reading the file");
-    let v: Ballot = serde_json::from_str(&contents).unwrap();
+pub fn hash_to(ballot: &Ballot) -> String {
+    let ballot_str = serde_json::to_string(&ballot).unwrap();
+    let mut hasher = Sha512::new();
+    hasher.update(ballot_str.as_bytes());
+    let hashed = hasher.finalize();
+    hex::encode(&hashed)
+}
+
+#[cfg(test)]
+mod tests {
+    use crate::ballot::*;
+    use std::fs;
+
+    #[test]
+    fn parse_ballot() {
+        let contents = fs::read_to_string("fixtures/ballot.json")
+            .expect("Something went wrong reading the file");
+        let ballot: Ballot = serde_json::from_str(&contents).unwrap();
+        let sha512_ballot = hash_to(&ballot);
+
+        assert_eq!(
+            &sha512_ballot,
+            "5febcf8df5b2f8ba818e026467af4d851c15379286b72194ea1537c3fe6085239fc13a2631a973ce0bfe48b4fe9569547e8fe5a71cb82c6a30f179e66ac23142"
+        )
+    }
 }
