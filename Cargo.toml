@@ -1,8 +1,26 @@
+# SPDX-FileCopyrightText: 2022 Felix Robles <felix@sequentech.io>
+#
+# SPDX-License-Identifier: AGPL-3.0-only
 [package]
 name = "sequent-core"
 version = "0.1.0"
 edition = "2021"
+authors = [
+  "Felix Robles <felix@sequentech.io>"
+]
+license = "AGPL-3.0-only"
+
+[lib]
+crate-type = ["cdylib", "rlib"]
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
+# wasm
+wasm-bindgen = {version = "0.2", optional = true}
+web-sys = { version = "0.3.4", features = ['Performance'], optional = true}
+cfg-if = "1.0.0"
+
+[features]
+wasmtest = ["wasm", "dep:web-sys"]
+wasm = ["wasm-bindgen"]
