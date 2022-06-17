@@ -4,7 +4,8 @@
 #[macro_use]
 extern crate cfg_if;
 
-pub mod ballot;
+mod ballot;
+pub use ballot::*;
 mod util;
 
 #[cfg(feature = "wasm")]
