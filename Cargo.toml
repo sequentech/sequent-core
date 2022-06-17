@@ -29,6 +29,8 @@ console_error_panic_hook = "0.1.7"
 ed25519-dalek = {version = "1", features = ["serde"]}
 # hex
 hex = "0.4"
+# rust to json schema
+schemars = "0.8"
 
 [features]
 wasmtest = ["wasm", "dep:web-sys"]

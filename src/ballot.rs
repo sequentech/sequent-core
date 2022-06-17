@@ -1,7 +1,8 @@
 use ed25519_dalek::{Digest, Sha512};
+use schemars::JsonSchema;
 use serde::{Deserialize, Serialize};
 
-#[derive(Serialize, Deserialize)]
+#[derive(Serialize, Deserialize, JsonSchema)]
 pub struct Ballot {
     election_url: String,
     issue_date: String,
@@ -11,7 +12,7 @@ pub struct Ballot {
     config: ElectionConfig,
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Serialize, Deserialize, JsonSchema)]
 pub struct Choice {
     alpha: String,
     beta: String,
@@ -19,20 +20,20 @@ pub struct Choice {
     randomness: String,
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Serialize, Deserialize, JsonSchema)]
 pub struct Proof {
     challenge: String,
     commitment: String,
     response: String,
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Serialize, Deserialize, JsonSchema)]
 pub struct ElectionConfig {
     date: String,
     payload: Payload,
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Serialize, Deserialize, JsonSchema)]
 pub struct Payload {
     id: i64,
     configuration: Configuration,
@@ -44,7 +45,7 @@ pub struct Payload {
     pks: Vec<Pk>,
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Serialize, Deserialize, JsonSchema)]
 pub struct Configuration {
     layout: String,
     description: String,
@@ -58,7 +59,7 @@ pub struct Configuration {
     id: i64,
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Serialize, Deserialize, JsonSchema)]
 pub struct Presentation {
     theme: String,
     share_text: String,
@@ -66,7 +67,7 @@ pub struct Presentation {
     theme_css: String,
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Serialize, Deserialize, JsonSchema)]
 pub struct Question {
     layout: String,
     description: String,
@@ -80,7 +81,7 @@ pub struct Question {
     answer_total_votes_percentage: String,
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Serialize, Deserialize, JsonSchema)]
 pub struct Answer {
     category: Category,
     text: String,
@@ -90,7 +91,7 @@ pub struct Answer {
     id: i64,
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Serialize, Deserialize, JsonSchema)]
 pub struct Pk {
     q: String,
     p: String,
@@ -98,7 +99,7 @@ pub struct Pk {
     g: String,
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Serialize, Deserialize, JsonSchema)]
 pub enum Category {
     #[serde(rename = "Candidaturas no agrupadas")]
     CandidaturasNoAgrupadas,
