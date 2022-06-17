@@ -4,18 +4,32 @@ use serde::{Deserialize, Serialize};
 
 #[derive(Serialize, Deserialize, JsonSchema)]
 pub struct Ballot {
-    election_url: String,
-    issue_date: String,
-    choices: Vec<Choice>,
-    proofs: Vec<Proof>,
+    cyphertext: Cyphertext,
+    replication: Replication,
     ballot_hash: String,
     config: ElectionConfig,
 }
 
 #[derive(Serialize, Deserialize, JsonSchema)]
-pub struct Choice {
+pub struct Cyphertext {
+    issue_date: String,
+    choices: Vec<CyphertextChoice>,
+    proofs: Vec<Proof>,
+}
+
+#[derive(Serialize, Deserialize, JsonSchema)]
+pub struct CyphertextChoice {
     alpha: String,
     beta: String,
+}
+
+#[derive(Serialize, Deserialize, JsonSchema)]
+pub struct Replication {
+    choices: Vec<ReplicationChoice>,
+}
+
+#[derive(Serialize, Deserialize, JsonSchema)]
+pub struct ReplicationChoice {
     plaintext: String,
     randomness: String,
 }
@@ -106,7 +120,7 @@ pub enum Category {
 }
 
 pub fn hash_to(ballot: &Ballot) -> String {
-    let ballot_str = serde_json::to_string(&ballot).unwrap();
+    let ballot_str = serde_json::to_string(&ballot.cyphertext).unwrap();
     let mut hasher = Sha512::new();
     hasher.update(ballot_str.as_bytes());
     let hashed = hasher.finalize();
@@ -124,10 +138,10 @@ mod tests {
             .expect("Something went wrong reading the file");
         let ballot: Ballot = serde_json::from_str(&contents).unwrap();
         let sha512_ballot = hash_to(&ballot);
-
+        assert_eq!(&sha512_ballot, &ballot.ballot_hash);
         assert_eq!(
             &sha512_ballot,
-            "5febcf8df5b2f8ba818e026467af4d851c15379286b72194ea1537c3fe6085239fc13a2631a973ce0bfe48b4fe9569547e8fe5a71cb82c6a30f179e66ac23142"
+            "f2f11a3ad2c03e7dea6d47316e607e4807a18ae064ddf6195fb27a0a180e9168dd9f0f169a352f409e32ee3f89b41a9a21a618a4857788efba13382066aa8df6"
         )
     }
 }
