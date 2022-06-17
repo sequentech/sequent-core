@@ -35,3 +35,4 @@ schemars = "0.8"
 [features]
 wasmtest = ["wasm", "dep:web-sys"]
 wasm = ["wasm-bindgen"]
+default = ["wasmtest"]

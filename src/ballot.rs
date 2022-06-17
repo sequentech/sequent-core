@@ -1,7 +1,9 @@
 use ed25519_dalek::{Digest, Sha512};
 use schemars::JsonSchema;
 use serde::{Deserialize, Serialize};
+use wasm_bindgen::prelude::*;
 
+#[wasm_bindgen]
 #[derive(Serialize, Deserialize, JsonSchema)]
 pub struct Ballot {
     cyphertext: Cyphertext,
@@ -10,6 +12,7 @@ pub struct Ballot {
     config: ElectionConfig,
 }
 
+#[wasm_bindgen]
 #[derive(Serialize, Deserialize, JsonSchema)]
 pub struct Cyphertext {
     issue_date: String,
@@ -17,23 +20,27 @@ pub struct Cyphertext {
     proofs: Vec<Proof>,
 }
 
+#[wasm_bindgen]
 #[derive(Serialize, Deserialize, JsonSchema)]
 pub struct CyphertextChoice {
     alpha: String,
     beta: String,
 }
 
+#[wasm_bindgen]
 #[derive(Serialize, Deserialize, JsonSchema)]
 pub struct Replication {
     choices: Vec<ReplicationChoice>,
 }
 
+#[wasm_bindgen]
 #[derive(Serialize, Deserialize, JsonSchema)]
 pub struct ReplicationChoice {
     plaintext: String,
     randomness: String,
 }
 
+#[wasm_bindgen]
 #[derive(Serialize, Deserialize, JsonSchema)]
 pub struct Proof {
     challenge: String,
@@ -41,12 +48,14 @@ pub struct Proof {
     response: String,
 }
 
+#[wasm_bindgen]
 #[derive(Serialize, Deserialize, JsonSchema)]
 pub struct ElectionConfig {
     date: String,
     payload: Payload,
 }
 
+#[wasm_bindgen]
 #[derive(Serialize, Deserialize, JsonSchema)]
 pub struct Payload {
     id: i64,
@@ -59,6 +68,7 @@ pub struct Payload {
     pks: Vec<Pk>,
 }
 
+#[wasm_bindgen]
 #[derive(Serialize, Deserialize, JsonSchema)]
 pub struct Configuration {
     layout: String,
@@ -73,6 +83,7 @@ pub struct Configuration {
     id: i64,
 }
 
+#[wasm_bindgen]
 #[derive(Serialize, Deserialize, JsonSchema)]
 pub struct Presentation {
     theme: String,
@@ -81,6 +92,7 @@ pub struct Presentation {
     theme_css: String,
 }
 
+#[wasm_bindgen]
 #[derive(Serialize, Deserialize, JsonSchema)]
 pub struct Question {
     layout: String,
@@ -95,6 +107,7 @@ pub struct Question {
     answer_total_votes_percentage: String,
 }
 
+#[wasm_bindgen]
 #[derive(Serialize, Deserialize, JsonSchema)]
 pub struct Answer {
     category: Category,
@@ -105,6 +118,7 @@ pub struct Answer {
     id: i64,
 }
 
+#[wasm_bindgen]
 #[derive(Serialize, Deserialize, JsonSchema)]
 pub struct Pk {
     q: String,
@@ -113,6 +127,7 @@ pub struct Pk {
     g: String,
 }
 
+#[wasm_bindgen]
 #[derive(Serialize, Deserialize, JsonSchema)]
 pub enum Category {
     #[serde(rename = "Candidaturas no agrupadas")]
