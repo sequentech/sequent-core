@@ -1,4 +1,4 @@
-use ed25519_dalek::{Digest, Sha512};
+//use ed25519_dalek::{Digest, Sha512};
 use schemars::JsonSchema;
 use serde::{Deserialize, Serialize};
 use wasm_bindgen::prelude::*;
@@ -133,7 +133,7 @@ pub enum Category {
     #[serde(rename = "Candidaturas no agrupadas")]
     CandidaturasNoAgrupadas,
 }
-
+/*
 pub fn hash_to(ballot: &Ballot) -> String {
     let ballot_str = serde_json::to_string(&ballot.cyphertext).unwrap();
     let mut hasher = Sha512::new();
@@ -160,3 +160,4 @@ mod tests {
         )
     }
 }
+*/
