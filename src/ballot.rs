@@ -5,7 +5,7 @@ use wasm_bindgen::prelude::*;
 
 #[wasm_bindgen]
 #[derive(Serialize, Deserialize)]
-pub struct Ballot {
+pub struct Ballot3 {
     issue_date: String,
 }
 /*
