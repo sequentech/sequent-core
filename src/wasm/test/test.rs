@@ -7,7 +7,7 @@ use serde::{Deserialize, Serialize};
 use wasm_bindgen::prelude::*;
 extern crate console_error_panic_hook;
 use std::panic;
-/*
+
 #[wasm_bindgen]
 extern "C" {
     #[wasm_bindgen(js_namespace = console)]
@@ -39,4 +39,3 @@ pub fn hash_ballot(val: &JsValue) -> String {
     let ballot: Ballot = val.into_serde().unwrap();
     hash_to(&ballot)
 }
-*/
