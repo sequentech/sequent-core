@@ -3,136 +3,131 @@ use schemars::JsonSchema;
 use serde::{Deserialize, Serialize};
 use wasm_bindgen::prelude::*;
 
-#[wasm_bindgen]
+#[wasm_bindgen(getter_with_clone)]
 #[derive(Serialize, Deserialize, JsonSchema)]
 pub struct Ballot {
-    pub cyphertext: Cyphertext,
-    pub replication: Replication,
-    pub ballot_hash: String,
-    pub config: ElectionConfig,
+    cyphertext: Cyphertext,
+    replication: Replication,
+    ballot_hash: String,
+    config: ElectionConfig,
 }
 
-#[wasm_bindgen]
+#[wasm_bindgen(getter_with_clone)]
 #[derive(Serialize, Deserialize, JsonSchema)]
 pub struct Cyphertext {
-    pub issue_date: String,
-    pub choices: Vec<CyphertextChoice>,
-    pub proofs: Vec<Proof>,
+    issue_date: String,
+    choices: Vec<CyphertextChoice>,
+    proofs: Vec<Proof>,
 }
 
-#[wasm_bindgen]
+
+#[wasm_bindgen(getter_with_clone)]
 #[derive(Serialize, Deserialize, JsonSchema)]
 pub struct CyphertextChoice {
-    pub alpha: String,
-    pub beta: String,
+    alpha: String,
+    beta: String,
 }
 
-#[wasm_bindgen]
+#[wasm_bindgen(getter_with_clone)]
 #[derive(Serialize, Deserialize, JsonSchema)]
 pub struct Replication {
-    pub choices: Vec<ReplicationChoice>,
+    choices: Vec<ReplicationChoice>,
 }
 
-#[wasm_bindgen]
+#[wasm_bindgen(getter_with_clone)]
 #[derive(Serialize, Deserialize, JsonSchema)]
 pub struct ReplicationChoice {
-    pub plaintext: String,
-    pub randomness: String,
+    plaintext: String,
+    randomness: String,
 }
 
-#[wasm_bindgen]
+#[wasm_bindgen(getter_with_clone)]
 #[derive(Serialize, Deserialize, JsonSchema)]
 pub struct Proof {
-    pub challenge: String,
-    pub commitment: String,
-    pub response: String,
+    challenge: String,
+    commitment: String,
+    response: String,
 }
 
-#[wasm_bindgen]
+#[wasm_bindgen(getter_with_clone)]
 #[derive(Serialize, Deserialize, JsonSchema)]
 pub struct ElectionConfig {
-    pub date: String,
-    pub payload: Payload,
+    date: String,
+    payload: Payload,
 }
 
-#[wasm_bindgen]
+#[wasm_bindgen(getter_with_clone)]
 #[derive(Serialize, Deserialize, JsonSchema)]
 pub struct Payload {
-    pub id: i64,
-    pub configuration: Configuration,
-    pub state: String,
+    id: i64,
+    configuration: Configuration,
+    state: String,
     #[serde(rename = "startDate")]
-    pub start_date: String,
+    start_date: String,
     #[serde(rename = "endDate")]
-    pub end_date: String,
-    pub pks: Vec<Pk>,
+    end_date: String,
+    pks: Vec<Pk>,
 }
 
-#[wasm_bindgen]
+#[wasm_bindgen(getter_with_clone)]
 #[derive(Serialize, Deserialize, JsonSchema)]
 pub struct Configuration {
-    pub layout: String,
-    pub description: String,
-    pub end_date: String,
-    pub title: String,
-    pub start_date: String,
-    pub director: String,
-    pub questions: Vec<Question>,
-    pub authorities: Vec<String>,
-    pub presentation: Presentation,
-    pub id: i64,
+    layout: String,
+    description: String,
+    end_date: String,
+    title: String,
+    start_date: String,
+    director: String,
+    questions: Vec<Question>,
+    authorities: Vec<String>,
+    presentation: Presentation,
+    id: i64,
 }
 
-#[wasm_bindgen]
+#[wasm_bindgen(getter_with_clone)]
 #[derive(Serialize, Deserialize, JsonSchema)]
 pub struct Presentation {
-    pub theme: String,
-    pub share_text: String,
-    pub urls: Vec<Option<serde_json::Value>>,
-    pub theme_css: String,
+    theme: String,
+    share_text: String,
+    urls: Vec<Option<serde_json::Value>>,
+    theme_css: String,
 }
 
-#[wasm_bindgen]
+#[wasm_bindgen(getter_with_clone)]
 #[derive(Serialize, Deserialize, JsonSchema)]
 pub struct Question {
-    pub layout: String,
-    pub description: String,
-    pub min: i64,
-    pub max: i64,
-    pub tally_type: String,
-    pub answers: Vec<Answer>,
-    pub num_winners: i64,
-    pub title: String,
-    pub randomize_answer_order: bool,
-    pub answer_total_votes_percentage: String,
+    layout: String,
+    description: String,
+    min: i64,
+    max: i64,
+    tally_type: String,
+    answers: Vec<Answer>,
+    num_winners: i64,
+    title: String,
+    randomize_answer_order: bool,
+    answer_total_votes_percentage: String,
 }
 
-#[wasm_bindgen]
+#[wasm_bindgen(getter_with_clone)]
 #[derive(Serialize, Deserialize, JsonSchema)]
 pub struct Answer {
-    pub category: Category,
-    pub text: String,
-    pub sort_order: i64,
-    pub details: String,
-    pub urls: Vec<Option<serde_json::Value>>,
-    pub id: i64,
+    category: String,
+    text: String,
+    sort_order: i64,
+    details: String,
+    urls: Vec<Option<serde_json::Value>>,
+    id: i64,
 }
 
-#[wasm_bindgen]
+#[wasm_bindgen(getter_with_clone)]
 #[derive(Serialize, Deserialize, JsonSchema)]
 pub struct Pk {
-    pub q: String,
-    pub p: String,
-    pub y: String,
-    pub g: String,
+    q: String,
+    p: String,
+    y: String,
+    g: String,
 }
 
-#[wasm_bindgen]
-#[derive(Serialize, Deserialize, JsonSchema)]
-pub enum Category {
-    #[serde(rename = "Candidaturas no agrupadas")]
-    pub CandidaturasNoAgrupadas,
-}
 
 pub fn hash_to(ballot: &Ballot) -> String {
     let ballot_str = serde_json::to_string(&ballot.cyphertext).unwrap();
