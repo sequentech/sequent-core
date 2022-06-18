@@ -8,5 +8,5 @@ mod ballot;
 pub use ballot::*;
 mod util;
 
-#[cfg(feature = "wasm")]
-pub mod wasm;
+//#[cfg(feature = "wasm")]
+//pub mod wasm;
