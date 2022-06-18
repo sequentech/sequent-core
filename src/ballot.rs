@@ -6,132 +6,132 @@ use wasm_bindgen::prelude::*;
 #[wasm_bindgen]
 #[derive(Serialize, Deserialize, JsonSchema)]
 pub struct Ballot {
-    cyphertext: Cyphertext,
-    replication: Replication,
-    ballot_hash: String,
-    config: ElectionConfig,
+    pub cyphertext: Cyphertext,
+    pub replication: Replication,
+    pub ballot_hash: String,
+    pub config: ElectionConfig,
 }
 
 #[wasm_bindgen]
 #[derive(Serialize, Deserialize, JsonSchema)]
 pub struct Cyphertext {
-    issue_date: String,
-    choices: Vec<CyphertextChoice>,
-    proofs: Vec<Proof>,
+    pub issue_date: String,
+    pub choices: Vec<CyphertextChoice>,
+    pub proofs: Vec<Proof>,
 }
 
 #[wasm_bindgen]
 #[derive(Serialize, Deserialize, JsonSchema)]
 pub struct CyphertextChoice {
-    alpha: String,
-    beta: String,
+    pub alpha: String,
+    pub beta: String,
 }
 
 #[wasm_bindgen]
 #[derive(Serialize, Deserialize, JsonSchema)]
 pub struct Replication {
-    choices: Vec<ReplicationChoice>,
+    pub choices: Vec<ReplicationChoice>,
 }
 
 #[wasm_bindgen]
 #[derive(Serialize, Deserialize, JsonSchema)]
 pub struct ReplicationChoice {
-    plaintext: String,
-    randomness: String,
+    pub plaintext: String,
+    pub randomness: String,
 }
 
 #[wasm_bindgen]
 #[derive(Serialize, Deserialize, JsonSchema)]
 pub struct Proof {
-    challenge: String,
-    commitment: String,
-    response: String,
+    pub challenge: String,
+    pub commitment: String,
+    pub response: String,
 }
 
 #[wasm_bindgen]
 #[derive(Serialize, Deserialize, JsonSchema)]
 pub struct ElectionConfig {
-    date: String,
-    payload: Payload,
+    pub date: String,
+    pub payload: Payload,
 }
 
 #[wasm_bindgen]
 #[derive(Serialize, Deserialize, JsonSchema)]
 pub struct Payload {
-    id: i64,
-    configuration: Configuration,
-    state: String,
+    pub id: i64,
+    pub configuration: Configuration,
+    pub state: String,
     #[serde(rename = "startDate")]
-    start_date: String,
+    pub start_date: String,
     #[serde(rename = "endDate")]
-    end_date: String,
-    pks: Vec<Pk>,
+    pub end_date: String,
+    pub pks: Vec<Pk>,
 }
 
 #[wasm_bindgen]
 #[derive(Serialize, Deserialize, JsonSchema)]
 pub struct Configuration {
-    layout: String,
-    description: String,
-    end_date: String,
-    title: String,
-    start_date: String,
-    director: String,
-    questions: Vec<Question>,
-    authorities: Vec<String>,
-    presentation: Presentation,
-    id: i64,
+    pub layout: String,
+    pub description: String,
+    pub end_date: String,
+    pub title: String,
+    pub start_date: String,
+    pub director: String,
+    pub questions: Vec<Question>,
+    pub authorities: Vec<String>,
+    pub presentation: Presentation,
+    pub id: i64,
 }
 
 #[wasm_bindgen]
 #[derive(Serialize, Deserialize, JsonSchema)]
 pub struct Presentation {
-    theme: String,
-    share_text: String,
-    urls: Vec<Option<serde_json::Value>>,
-    theme_css: String,
+    pub theme: String,
+    pub share_text: String,
+    pub urls: Vec<Option<serde_json::Value>>,
+    pub theme_css: String,
 }
 
 #[wasm_bindgen]
 #[derive(Serialize, Deserialize, JsonSchema)]
 pub struct Question {
-    layout: String,
-    description: String,
-    min: i64,
-    max: i64,
-    tally_type: String,
-    answers: Vec<Answer>,
-    num_winners: i64,
-    title: String,
-    randomize_answer_order: bool,
-    answer_total_votes_percentage: String,
+    pub layout: String,
+    pub description: String,
+    pub min: i64,
+    pub max: i64,
+    pub tally_type: String,
+    pub answers: Vec<Answer>,
+    pub num_winners: i64,
+    pub title: String,
+    pub randomize_answer_order: bool,
+    pub answer_total_votes_percentage: String,
 }
 
 #[wasm_bindgen]
 #[derive(Serialize, Deserialize, JsonSchema)]
 pub struct Answer {
-    category: Category,
-    text: String,
-    sort_order: i64,
-    details: String,
-    urls: Vec<Option<serde_json::Value>>,
-    id: i64,
+    pub category: Category,
+    pub text: String,
+    pub sort_order: i64,
+    pub details: String,
+    pub urls: Vec<Option<serde_json::Value>>,
+    pub id: i64,
 }
 
 #[wasm_bindgen]
 #[derive(Serialize, Deserialize, JsonSchema)]
 pub struct Pk {
-    q: String,
-    p: String,
-    y: String,
-    g: String,
+    pub q: String,
+    pub p: String,
+    pub y: String,
+    pub g: String,
 }
 
 #[wasm_bindgen]
 #[derive(Serialize, Deserialize, JsonSchema)]
 pub enum Category {
     #[serde(rename = "Candidaturas no agrupadas")]
-    CandidaturasNoAgrupadas,
+    pub CandidaturasNoAgrupadas,
 }
 
 pub fn hash_to(ballot: &Ballot) -> String {
