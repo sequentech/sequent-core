@@ -25,7 +25,7 @@ impl Ballot {
     }
 
     #[wasm_bindgen(setter)]
-    pub fn set_field(&mut self, cyphertext: &Cyphertext) {
+    pub fn set_cyphertext(&mut self, cyphertext: &Cyphertext) {
         self.cyphertext = cyphertext.clone();
     }
 }
@@ -51,7 +51,7 @@ impl Cyphertext {
     }
 
     #[wasm_bindgen(setter)]
-    pub fn set_field(&mut self, issue_date: String) {
+    pub fn set_issue_date(&mut self, issue_date: String) {
         self.issue_date = issue_date;
     }
 }
