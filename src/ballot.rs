@@ -2,82 +2,113 @@ use ed25519_dalek::{Digest, Sha512};
 use schemars::JsonSchema;
 use serde::{Deserialize, Serialize};
 use wasm_bindgen::prelude::*;
+use wasm_bindgen::convert::{IntoWasmAbi};
+//use wasm_bindgen::describe::{WasmDescribe};
 
-#[wasm_bindgen]
-#[derive(Serialize, Deserialize, JsonSchema, Clone)]
+#[derive(Serialize, Deserialize, JsonSchema)]
 pub struct Ballot {
-    cyphertext: Cyphertext,
-    /*pub replication: Replication,
+    pub cyphertext: Cyphertext,
+    pub replication: Replication,
     pub ballot_hash: String,
-    pub config: ElectionConfig,*/
+    pub config: ElectionConfig,
 }
 
+#[wasm_bindgen(typescript_custom_section)]
+const IBALLOT: &'static str = r#"
+interface IBallot {
+    cyphertext: ICyphertext;
+    replication: IReplication;
+    ballot_hash: string;
+    config: IElectionConfig;
+}
+"#;
+
 #[wasm_bindgen]
-impl Ballot {
-    #[wasm_bindgen(constructor)]
-    pub fn new(cyphertext: Cyphertext) -> Ballot {
-        Ballot { cyphertext }
-    }
-
-    #[wasm_bindgen(getter)]
-    pub fn cyphertext(&self) -> Cyphertext {
-        self.cyphertext.clone()
-    }
-
-    #[wasm_bindgen(setter)]
-    pub fn set_cyphertext(&mut self, cyphertext: &Cyphertext) {
-        self.cyphertext = cyphertext.clone();
-    }
+extern "C" {
+    #[wasm_bindgen(typescript_type = "IBallot")]
+    pub type IBallot;
 }
 
-#[wasm_bindgen]
-#[derive(Serialize, Deserialize, JsonSchema, Clone)]
+#[derive(Serialize, Deserialize, JsonSchema)]
 pub struct Cyphertext {
-    issue_date: String,
-    /*pub choices: Vec<CyphertextChoice>,
-    pub proofs: Vec<Proof>,*/
+    pub issue_date: String,
+    pub choices: Vec<CyphertextChoice>,
+    pub proofs: Vec<Proof>,
 }
 
-#[wasm_bindgen]
-impl Cyphertext {
-    #[wasm_bindgen(constructor)]
-    pub fn new(issue_date: String) -> Cyphertext {
-        Cyphertext { issue_date }
-    }
-
-    #[wasm_bindgen(getter)]
-    pub fn issue_date(&self) -> String {
-        self.issue_date.clone()
-    }
-
-    #[wasm_bindgen(setter)]
-    pub fn set_issue_date(&mut self, issue_date: String) {
-        self.issue_date = issue_date;
-    }
+#[wasm_bindgen(typescript_custom_section)]
+const ICYPHERTEXT: &'static str = r#"
+interface ICyphertext {
+    issue_date: string;
+    choices: Array<ICyphertextChoice>;
+    proofs: Array<IProof>;
 }
-/*
+"#;
 
 #[wasm_bindgen]
+extern "C" {
+    #[wasm_bindgen(typescript_type = "ICyphertext")]
+    pub type ICyphertext;
+}
+
 #[derive(Serialize, Deserialize, JsonSchema)]
 pub struct CyphertextChoice {
     pub alpha: String,
     pub beta: String,
 }
 
+#[wasm_bindgen(typescript_custom_section)]
+const ICYPHERTEXT_CHOICE: &'static str = r#"
+interface ICyphertextChoice {
+    alpha: string;
+    beta: string;
+}
+"#;
+
 #[wasm_bindgen]
+extern "C" {
+    #[wasm_bindgen(typescript_type = "ICyphertextChoice")]
+    pub type ICyphertextChoice;
+}
+
 #[derive(Serialize, Deserialize, JsonSchema)]
 pub struct Replication {
     pub choices: Vec<ReplicationChoice>,
 }
 
+#[wasm_bindgen(typescript_custom_section)]
+const IREPLICATION: &'static str = r#"
+interface IReplication {
+    choices: Array<IReplicationChoice>;
+}
+"#;
+
 #[wasm_bindgen]
+extern "C" {
+    #[wasm_bindgen(typescript_type = "IReplication")]
+    pub type IReplication;
+}
+
 #[derive(Serialize, Deserialize, JsonSchema)]
 pub struct ReplicationChoice {
     pub plaintext: String,
     pub randomness: String,
 }
 
+#[wasm_bindgen(typescript_custom_section)]
+const IREPLICATION_CHOICE: &'static str = r#"
+interface IReplicationChoice {
+    plaintext: string;
+    randomness: string;
+}
+"#;
+
 #[wasm_bindgen]
+extern "C" {
+    #[wasm_bindgen(typescript_type = "IReplicationChoice")]
+    pub type IReplicationChoice;
+}
+
 #[derive(Serialize, Deserialize, JsonSchema)]
 pub struct Proof {
     pub challenge: String,
@@ -85,27 +116,69 @@ pub struct Proof {
     pub response: String,
 }
 
+#[wasm_bindgen(typescript_custom_section)]
+const IPROOF: &'static str = r#"
+interface IProof {
+    challenge: string;
+    commitment: string;
+    response: string;
+}
+"#;
+
 #[wasm_bindgen]
+extern "C" {
+    #[wasm_bindgen(typescript_type = "IProof")]
+    pub type IProof;
+}
+
 #[derive(Serialize, Deserialize, JsonSchema)]
 pub struct ElectionConfig {
     pub date: String,
     pub payload: Payload,
 }
 
+#[wasm_bindgen(typescript_custom_section)]
+const IELECTION_CONFIG: &'static str = r#"
+interface IElectionConfig {
+    date: string;
+    payload: IPayload;
+}
+"#;
+
 #[wasm_bindgen]
+extern "C" {
+    #[wasm_bindgen(typescript_type = "IElectionConfig")]
+    pub type IElectionConfig;
+}
+
 #[derive(Serialize, Deserialize, JsonSchema)]
 pub struct Payload {
     pub id: i64,
     pub configuration: Configuration,
     pub state: String,
-    #[serde(rename = "startDate")]
     pub start_date: String,
-    #[serde(rename = "endDate")]
     pub end_date: String,
     pub pks: Vec<Pk>,
 }
 
+#[wasm_bindgen(typescript_custom_section)]
+const IPAYLOAD: &'static str = r#"
+interface IPayload {
+    id: number;
+    configuration: IConfiguration;
+    state: string;
+    start_date: string;
+    end_date: string;
+    pks: Array<IPk>;
+}
+"#;
+
 #[wasm_bindgen]
+extern "C" {
+    #[wasm_bindgen(typescript_type = "IPayload")]
+    pub type IPayload;
+}
+
 #[derive(Serialize, Deserialize, JsonSchema)]
 pub struct Configuration {
     pub layout: String,
@@ -120,16 +193,52 @@ pub struct Configuration {
     pub id: i64,
 }
 
+#[wasm_bindgen(typescript_custom_section)]
+const ICONFIGURATION: &'static str = r#"
+interface IConfiguration {
+    layout: string;
+    description: string;
+    end_date: string;
+    title: string;
+    start_date: string;
+    director: string;
+    questions: Array<IQuestion>;
+    authorities: Array<string>;
+    presentation: IPresentation;
+    id: number;
+}
+"#;
+
 #[wasm_bindgen]
+extern "C" {
+    #[wasm_bindgen(typescript_type = "IConfiguration")]
+    pub type IConfiguration;
+}
+
 #[derive(Serialize, Deserialize, JsonSchema)]
 pub struct Presentation {
     pub theme: String,
     pub share_text: String,
-    pub urls: Vec<Option<serde_json::Value>>,
+    pub urls: Vec<String>,
     pub theme_css: String,
 }
 
+#[wasm_bindgen(typescript_custom_section)]
+const IPRESENTATION: &'static str = r#"
+interface IPresentation {
+    theme: string;
+    share_text: string;
+    urls: Array<string>;
+    theme_css: string;
+}
+"#;
+
 #[wasm_bindgen]
+extern "C" {
+    #[wasm_bindgen(typescript_type = "IPresentation")]
+    pub type IPresentation;
+}
+
 #[derive(Serialize, Deserialize, JsonSchema)]
 pub struct Question {
     pub layout: String,
@@ -144,25 +253,79 @@ pub struct Question {
     pub answer_total_votes_percentage: String,
 }
 
+#[wasm_bindgen(typescript_custom_section)]
+const IQUESTION: &'static str = r#"
+interface IQuestion {
+    layout: string;
+    description: string;
+    min: number;
+    max: number;
+    tally_type: string;
+    answers: Array<IAnswer>;
+    num_winners: number;
+    title: string; 
+    randomize_answer_order: boolean;
+    answer_total_votes_percentage: string;
+}
+"#;
+
 #[wasm_bindgen]
+extern "C" {
+    #[wasm_bindgen(typescript_type = "IQuestion")]
+    pub type IQuestion;
+}
+
 #[derive(Serialize, Deserialize, JsonSchema)]
 pub struct Answer {
     pub category: String,
     pub text: String,
     pub sort_order: i64,
     pub details: String,
-    pub urls: Vec<Option<serde_json::Value>>,
+    pub urls: Vec<String>,
     pub id: i64,
 }
 
+#[wasm_bindgen(typescript_custom_section)]
+const IANSWER: &'static str = r#"
+interface IAnswer {
+    category: string;
+    text: string;
+    sort_order: number;
+    details: string;
+    urls: Array<string>;
+    id: number;
+}
+"#;
+
 #[wasm_bindgen]
+extern "C" {
+    #[wasm_bindgen(typescript_type = "IAnswer")]
+    pub type IAnswer;
+}
+
 #[derive(Serialize, Deserialize, JsonSchema)]
 pub struct Pk {
     pub q: String,
     pub p: String,
     pub y: String,
     pub g: String,
-}*/
+}
+
+#[wasm_bindgen(typescript_custom_section)]
+const IPK: &'static str = r#"
+interface IPk {
+    p: string;
+    q: string;
+    g: string;
+    y: string;
+}
+"#;
+
+#[wasm_bindgen]
+extern "C" {
+    #[wasm_bindgen(typescript_type = "IPk")]
+    pub type IPk;
+}
 
 pub fn hash_to(ballot: &Ballot) -> String {
     let ballot_str = serde_json::to_string(&ballot.cyphertext).unwrap();
