@@ -2,8 +2,6 @@ use ed25519_dalek::{Digest, Sha512};
 use schemars::JsonSchema;
 use serde::{Deserialize, Serialize};
 use wasm_bindgen::prelude::*;
-use wasm_bindgen::convert::{IntoWasmAbi};
-//use wasm_bindgen::describe::{WasmDescribe};
 
 #[derive(Serialize, Deserialize, JsonSchema)]
 pub struct Ballot {

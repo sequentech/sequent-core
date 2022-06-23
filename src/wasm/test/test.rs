@@ -15,7 +15,7 @@ extern "C" {
     #[wasm_bindgen]
     fn postMessage(s: &str);
 }
-
+/*
 #[wasm_bindgen]
 pub fn message(s: &str) {
     log(s);
@@ -27,7 +27,7 @@ pub fn test() {
     let res = sum(2, 2);
     let formatted_msg = format!("--- wasm::test.rs - {}", res.to_string());
     message(&formatted_msg.to_string())
-}
+}*/
 
 #[wasm_bindgen]
 pub fn my_init_function() {

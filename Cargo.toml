@@ -31,6 +31,10 @@ ed25519-dalek = {version = "1", features = ["serde"]}
 hex = "0.4"
 # rust to json schema
 schemars = "0.8"
+# strand
+strand = { git = "https://github.com/sequentech/strand", rev = "6b90d1b86b8a4cd8bc5b0996db5024ca839e7193", features = ['wasmtest']}
+num-bigint = { version = "0.4", features = ["rand"] }
+num-traits = "0.2"
 
 [features]
 wasmtest = ["wasm", "dep:web-sys"]
