@@ -6,8 +6,8 @@ extern crate cfg_if;
 
 mod ballot;
 pub use ballot::*;
-mod util;
 mod encrypt;
+mod util;
 
 #[cfg(feature = "wasm")]
 pub mod wasm;
