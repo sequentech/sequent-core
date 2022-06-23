@@ -5,7 +5,6 @@ use wasm_bindgen::prelude::*;
 
 #[derive(Serialize, Deserialize, JsonSchema)]
 pub struct Ballot {
-    pub cyphertext: Cyphertext,
     pub replication: Replication,
     pub ballot_hash: String,
     pub config: ElectionConfig,
@@ -31,7 +30,6 @@ extern "C" {
 pub struct Cyphertext {
     pub issue_date: String,
     pub choices: Vec<CyphertextChoice>,
-    pub proofs: Vec<Proof>,
 }
 
 #[wasm_bindgen(typescript_custom_section)]
@@ -39,7 +37,6 @@ const ICYPHERTEXT: &'static str = r#"
 interface ICyphertext {
     issue_date: string;
     choices: Array<ICyphertextChoice>;
-    proofs: Array<IProof>;
 }
 "#;
 
@@ -51,15 +48,15 @@ extern "C" {
 
 #[derive(Serialize, Deserialize, JsonSchema)]
 pub struct CyphertextChoice {
-    pub alpha: String,
-    pub beta: String,
+    pub gr: String,  // alpha
+    pub mhr: String, // beta
 }
 
 #[wasm_bindgen(typescript_custom_section)]
 const ICYPHERTEXT_CHOICE: &'static str = r#"
 interface ICyphertextChoice {
-    alpha: string;
-    beta: string;
+    gr: string;
+    mhr: string;
 }
 "#;
 
@@ -71,12 +68,14 @@ extern "C" {
 
 #[derive(Serialize, Deserialize, JsonSchema)]
 pub struct Replication {
+    pub issue_date: String,
     pub choices: Vec<ReplicationChoice>,
 }
 
 #[wasm_bindgen(typescript_custom_section)]
 const IREPLICATION: &'static str = r#"
 interface IReplication {
+    issue_date: string;
     choices: Array<IReplicationChoice>;
 }
 "#;
@@ -105,28 +104,6 @@ interface IReplicationChoice {
 extern "C" {
     #[wasm_bindgen(typescript_type = "IReplicationChoice")]
     pub type IReplicationChoice;
-}
-
-#[derive(Serialize, Deserialize, JsonSchema)]
-pub struct Proof {
-    pub challenge: String,
-    pub commitment: String,
-    pub response: String,
-}
-
-#[wasm_bindgen(typescript_custom_section)]
-const IPROOF: &'static str = r#"
-interface IProof {
-    challenge: string;
-    commitment: string;
-    response: string;
-}
-"#;
-
-#[wasm_bindgen]
-extern "C" {
-    #[wasm_bindgen(typescript_type = "IProof")]
-    pub type IProof;
 }
 
 #[derive(Serialize, Deserialize, JsonSchema)]
@@ -303,19 +280,15 @@ extern "C" {
 
 #[derive(Serialize, Deserialize, JsonSchema)]
 pub struct Pk {
-    pub q: String,
-    pub p: String,
-    pub y: String,
-    pub g: String,
+    pub key_type: KeyType,
+    pub public_key: String,
 }
 
 #[wasm_bindgen(typescript_custom_section)]
 const IPK: &'static str = r#"
 interface IPk {
-    p: string;
-    q: string;
-    g: string;
-    y: string;
+    key_type: IKeyType;
+    public_key: string;
 }
 "#;
 
@@ -323,6 +296,24 @@ interface IPk {
 extern "C" {
     #[wasm_bindgen(typescript_type = "IPk")]
     pub type IPk;
+}
+
+#[derive(Serialize, Deserialize)]
+pub enum KeyType {
+    P2048(String),
+}
+
+#[wasm_bindgen(typescript_custom_section)]
+const KEYTYPE: &'static str = r#"
+enum IKeyType {
+    P2048 = "P2048",
+}
+"#;
+
+#[wasm_bindgen]
+extern "C" {
+    #[wasm_bindgen(typescript_type = "IKeyType")]
+    pub type IKeyType;
 }
 
 pub fn hash_to(ballot: &Ballot) -> String {
