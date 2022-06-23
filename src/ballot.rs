@@ -1,4 +1,3 @@
-use ed25519_dalek::{Digest, Sha512};
 use schemars::JsonSchema;
 use serde::{Deserialize, Serialize};
 use wasm_bindgen::prelude::*;
@@ -298,9 +297,9 @@ extern "C" {
     pub type IPk;
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Serialize, Deserialize, JsonSchema, PartialEq, Debug)]
 pub enum KeyType {
-    P2048(String),
+    P2048,
 }
 
 #[wasm_bindgen(typescript_custom_section)]
@@ -314,31 +313,4 @@ enum IKeyType {
 extern "C" {
     #[wasm_bindgen(typescript_type = "IKeyType")]
     pub type IKeyType;
-}
-
-pub fn hash_to(ballot: &Ballot) -> String {
-    let ballot_str = serde_json::to_string(&ballot.cyphertext).unwrap();
-    let mut hasher = Sha512::new();
-    hasher.update(ballot_str.as_bytes());
-    let hashed = hasher.finalize();
-    hex::encode(&hashed)
-}
-
-#[cfg(test)]
-mod tests {
-    use crate::ballot::*;
-    use std::fs;
-
-    #[test]
-    fn parse_ballot() {
-        let contents = fs::read_to_string("fixtures/ballot.json")
-            .expect("Something went wrong reading the file");
-        let ballot: Ballot = serde_json::from_str(&contents).unwrap();
-        let sha512_ballot = hash_to(&ballot);
-        assert_eq!(&sha512_ballot, &ballot.ballot_hash);
-        assert_eq!(
-            &sha512_ballot,
-            "f2f11a3ad2c03e7dea6d47316e607e4807a18ae064ddf6195fb27a0a180e9168dd9f0f169a352f409e32ee3f89b41a9a21a618a4857788efba13382066aa8df6"
-        )
-    }
 }

@@ -2,6 +2,7 @@
 //
 // SPDX-License-Identifier: AGPL-3.0-only
 use crate::ballot::*;
+use crate::encrypt::*;
 use crate::util::*;
 use serde::{Deserialize, Serialize};
 use wasm_bindgen::prelude::*;
@@ -27,15 +28,16 @@ pub fn test() {
     let res = sum(2, 2);
     let formatted_msg = format!("--- wasm::test.rs - {}", res.to_string());
     message(&formatted_msg.to_string())
-}*/
-
-#[wasm_bindgen]
-pub fn my_init_function() {
-    panic::set_hook(Box::new(console_error_panic_hook::hook));
 }
+*/
 
 #[wasm_bindgen]
 pub fn hash_ballot(val: &JsValue) -> String {
     let ballot: Ballot = val.into_serde().unwrap();
     hash_to(&ballot)
+}
+
+#[wasm_bindgen]
+pub fn my_init_function() {
+    panic::set_hook(Box::new(console_error_panic_hook::hook));
 }
