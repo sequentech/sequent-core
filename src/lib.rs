@@ -5,7 +5,7 @@
 extern crate quick_error;
 extern crate cfg_if;
 
-mod ballot;
+pub mod ballot;
 pub use ballot::*;
-mod encrypt;
-mod util;
+pub mod encrypt;
+pub mod util;
