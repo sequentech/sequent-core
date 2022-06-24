@@ -2,7 +2,7 @@ use schemars::JsonSchema;
 use serde::{Deserialize, Serialize};
 use wasm_bindgen::prelude::*;
 
-#[derive(Serialize, Deserialize, JsonSchema)]
+#[derive(Serialize, Deserialize, JsonSchema, PartialEq, Debug)]
 pub struct Ballot {
     pub replication: Replication,
     pub ballot_hash: String,
@@ -25,7 +25,7 @@ extern "C" {
     pub type IBallot;
 }
 
-#[derive(Serialize, Deserialize, JsonSchema)]
+#[derive(Serialize, Deserialize, JsonSchema, PartialEq, Debug)]
 pub struct Cyphertext {
     pub issue_date: String,
     pub choices: Vec<CyphertextChoice>,
@@ -45,7 +45,7 @@ extern "C" {
     pub type ICyphertext;
 }
 
-#[derive(Serialize, Deserialize, JsonSchema)]
+#[derive(Serialize, Deserialize, JsonSchema, PartialEq, Debug)]
 pub struct CyphertextChoice {
     pub gr: String,  // alpha
     pub mhr: String, // beta
@@ -65,7 +65,7 @@ extern "C" {
     pub type ICyphertextChoice;
 }
 
-#[derive(Serialize, Deserialize, JsonSchema)]
+#[derive(Serialize, Deserialize, JsonSchema, PartialEq, Debug)]
 pub struct Replication {
     pub issue_date: String,
     pub choices: Vec<ReplicationChoice>,
@@ -85,7 +85,7 @@ extern "C" {
     pub type IReplication;
 }
 
-#[derive(Serialize, Deserialize, JsonSchema)]
+#[derive(Serialize, Deserialize, JsonSchema, PartialEq, Debug)]
 pub struct ReplicationChoice {
     pub plaintext: String,
     pub randomness: String,
@@ -105,7 +105,7 @@ extern "C" {
     pub type IReplicationChoice;
 }
 
-#[derive(Serialize, Deserialize, JsonSchema)]
+#[derive(Serialize, Deserialize, JsonSchema, PartialEq, Debug)]
 pub struct ElectionConfig {
     pub date: String,
     pub payload: Payload,
@@ -125,7 +125,7 @@ extern "C" {
     pub type IElectionConfig;
 }
 
-#[derive(Serialize, Deserialize, JsonSchema)]
+#[derive(Serialize, Deserialize, JsonSchema, PartialEq, Debug)]
 pub struct Payload {
     pub id: i64,
     pub configuration: Configuration,
@@ -153,7 +153,7 @@ extern "C" {
     pub type IPayload;
 }
 
-#[derive(Serialize, Deserialize, JsonSchema)]
+#[derive(Serialize, Deserialize, JsonSchema, PartialEq, Debug)]
 pub struct Configuration {
     pub layout: String,
     pub description: String,
@@ -189,7 +189,7 @@ extern "C" {
     pub type IConfiguration;
 }
 
-#[derive(Serialize, Deserialize, JsonSchema)]
+#[derive(Serialize, Deserialize, JsonSchema, PartialEq, Debug)]
 pub struct Presentation {
     pub theme: String,
     pub share_text: String,
@@ -213,7 +213,7 @@ extern "C" {
     pub type IPresentation;
 }
 
-#[derive(Serialize, Deserialize, JsonSchema)]
+#[derive(Serialize, Deserialize, JsonSchema, PartialEq, Debug)]
 pub struct Question {
     pub layout: String,
     pub description: String,
@@ -249,7 +249,7 @@ extern "C" {
     pub type IQuestion;
 }
 
-#[derive(Serialize, Deserialize, JsonSchema)]
+#[derive(Serialize, Deserialize, JsonSchema, PartialEq, Debug)]
 pub struct Answer {
     pub category: String,
     pub text: String,
@@ -277,7 +277,7 @@ extern "C" {
     pub type IAnswer;
 }
 
-#[derive(Serialize, Deserialize, JsonSchema)]
+#[derive(Serialize, Deserialize, JsonSchema, PartialEq, Debug)]
 pub struct Pk {
     pub key_type: KeyType,
     pub public_key: String,

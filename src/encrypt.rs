@@ -18,7 +18,7 @@ fn recreate_encrypt_answer(public_key: &Pk, choice: &ReplicationChoice) -> Cyphe
     // parse randomness
     let randomness = BigUint::from_str_radix(&choice.randomness, 10).unwrap();
 
-    // valid checks
+    // sanity checks
     assert!(ctx.is_valid_element(&plaintext));
     assert_eq!(public_key.key_type, KeyType::P2048);
 
@@ -79,7 +79,12 @@ mod tests {
         assert_eq!(&sha512_ballot, &ballot.ballot_hash);
         assert_eq!(
             &sha512_ballot,
-            "e182b0ee3654d252fec6b47b210e8e2a5ce051b6702ae1da6516dab6a47f6df507b0ce6dfd0d9b267c9e5ede8be8732b365365f4e8cb39159d75d7f4a9b80cc2"
-        )
+            "bc15bf91def8033b8b586e929335c40e23ffc576a1bcb469909646222abcf6858e290b52f836cbb9744462c6869788878d88b22c8b4d9efd7cb750b700dba3e8"
+        );
+        let recreated_cyphertext = recreate_encrypt_cyphertext(&ballot);
+        let cyphertext_contents = fs::read_to_string("fixtures/cyphertext.json")
+            .expect("Something went wrong reading the file");
+        let cyphertext: Cyphertext = serde_json::from_str(&cyphertext_contents).unwrap();
+        assert_eq!(cyphertext, recreated_cyphertext);
     }
 }

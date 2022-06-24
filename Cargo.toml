@@ -32,7 +32,7 @@ hex = "0.4"
 # rust to json schema
 schemars = "0.8"
 # strand
-strand = { git = "https://github.com/sequentech/strand", rev = "6b90d1b86b8a4cd8bc5b0996db5024ca839e7193", features = ['wasmtest']}
+strand = { git = "https://github.com/sequentech/strand", rev = "32af48f5abd709b39140061709a576916cc474b4", features = ['wasmtest']}
 num-bigint = { version = "0.4", features = ["rand"] }
 num-traits = "0.2"
 
