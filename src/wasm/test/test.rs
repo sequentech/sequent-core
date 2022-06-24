@@ -34,7 +34,7 @@ pub fn test() {
 #[wasm_bindgen]
 pub fn hash_ballot(val: &JsValue) -> String {
     let ballot: Ballot = val.into_serde().unwrap();
-    hash_to(&ballot)
+    hash_to(&ballot).unwrap()
 }
 
 #[wasm_bindgen]

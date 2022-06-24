@@ -35,6 +35,7 @@ schemars = "0.8"
 strand = { git = "https://github.com/sequentech/strand", rev = "32af48f5abd709b39140061709a576916cc474b4", features = ['wasmtest']}
 num-bigint = { version = "0.4", features = ["rand"] }
 num-traits = "0.2"
+quick-error = "2.0.0"
 
 [features]
 wasmtest = ["wasm", "dep:web-sys"]

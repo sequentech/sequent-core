@@ -4,6 +4,7 @@ use wasm_bindgen::prelude::*;
 
 #[derive(Serialize, Deserialize, JsonSchema, PartialEq, Debug)]
 pub struct Ballot {
+    pub cyphertext: Cyphertext,
     pub replication: Replication,
     pub ballot_hash: String,
     pub config: ElectionConfig,
