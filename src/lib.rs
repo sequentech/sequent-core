@@ -9,6 +9,3 @@ mod ballot;
 pub use ballot::*;
 mod encrypt;
 mod util;
-
-#[cfg(feature = "wasm")]
-pub mod wasm;
