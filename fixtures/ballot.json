@@ -1,4 +1,5 @@
 {
+   "schema_version": "ALPHA",
    "ballot_hash":"bc15bf91def8033b8b586e929335c40e23ffc576a1bcb469909646222abcf6858e290b52f836cbb9744462c6869788878d88b22c8b4d9efd7cb750b700dba3e8",
    "cyphertext": {
       "issue_date":"7/10/2021",

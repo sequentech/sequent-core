@@ -4,6 +4,7 @@ use wasm_bindgen::prelude::*;
 
 #[derive(Serialize, Deserialize, JsonSchema, PartialEq, Debug)]
 pub struct Ballot {
+    pub schema_version: SchemaVersion,
     pub cyphertext: Cyphertext,
     pub replication: Replication,
     pub ballot_hash: String,
@@ -13,6 +14,7 @@ pub struct Ballot {
 #[wasm_bindgen(typescript_custom_section)]
 const IBALLOT: &'static str = r#"
 interface IBallot {
+    schema_version: ISchemaVersion;
     cyphertext: ICyphertext;
     replication: IReplication;
     ballot_hash: string;
@@ -24,6 +26,24 @@ interface IBallot {
 extern "C" {
     #[wasm_bindgen(typescript_type = "IBallot")]
     pub type IBallot;
+}
+
+#[derive(Serialize, Deserialize, JsonSchema, PartialEq, Debug)]
+pub enum SchemaVersion {
+    ALPHA,
+}
+
+#[wasm_bindgen(typescript_custom_section)]
+const SCHEMA_VERSION: &'static str = r#"
+enum ISchemaVersion {
+    ALPHA = "ALPHA",
+}
+"#;
+
+#[wasm_bindgen]
+extern "C" {
+    #[wasm_bindgen(typescript_type = "ISchemaVersion")]
+    pub type ISchemaVersion;
 }
 
 #[derive(Serialize, Deserialize, JsonSchema, PartialEq, Debug)]
@@ -304,7 +324,7 @@ pub enum KeyType {
 }
 
 #[wasm_bindgen(typescript_custom_section)]
-const KEYTYPE: &'static str = r#"
+const KEY_TYPE: &'static str = r#"
 enum IKeyType {
     P2048 = "P2048",
 }

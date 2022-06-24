@@ -22,6 +22,7 @@ fn recreate_encrypt_answer(
 ) -> Result<CyphertextChoice, BallotError> {
     // create P2048 context
     let ctx = BigintCtx::<P2048>::new();
+
     // create public key
     let pk_bigint = BigUint::from_str_radix(&public_key.public_key, 10).map_err(|_| {
         BallotError::ParseBigUint(
@@ -30,6 +31,7 @@ fn recreate_encrypt_answer(
         )
     })?;
     let pk = PublicKey::from_element(&pk_bigint, &ctx);
+
     // parse plaintext
     let plaintext = BigUint::from_str_radix(&choice.plaintext, 10).map_err(|_| {
         BallotError::ParseBigUint(
