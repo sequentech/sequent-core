@@ -2,7 +2,7 @@ use crate::ballot::*;
 use ed25519_dalek::{Digest, Sha512};
 use num_bigint::BigUint;
 use num_traits::Num;
-use strand::backend::numb::{BigUintE, BigUintX, BigintCtx, P2048};
+use strand::backend::num_bigint::{BigintCtx, P2048};
 use strand::context::Ctx;
 use strand::elgamal::*;
 
@@ -24,40 +24,33 @@ fn recreate_encrypt_answer(
     let ctx = BigintCtx::<P2048>::new();
 
     // create public key
-    let pk_bigint = BigUintE(BigUint::from_str_radix(&public_key.public_key, 10).map_err(
-        |_| {
-            BallotError::ParseBigUint(
-                public_key.public_key.clone(),
-                String::from("Error parsing public key"),
-            )
-        },
-    )?);
-    let pk = PublicKey::from_element(&pk_bigint, &ctx);
+    let pk_bigint = BigUint::from_str_radix(&public_key.public_key, 10).map_err(|_| {
+        BallotError::ParseBigUint(
+            public_key.public_key.clone(),
+            String::from("Error parsing public key"),
+        )
+    })?;
+    let pk_bigint_e = ctx.element_from_bytes(&pk_bigint.to_bytes_le()).unwrap();
+    let pk = PublicKey::from_element(&pk_bigint_e, &ctx);
 
     // parse plaintext
-    let plaintext = BigUintE(BigUint::from_str_radix(&choice.plaintext, 10).map_err(|_| {
+    let plaintext = BigUint::from_str_radix(&choice.plaintext, 10).map_err(|_| {
         BallotError::ParseBigUint(
             choice.plaintext.clone(),
             String::from("Error parsing plaintext"),
         )
-    })?);
+    })?;
+    let plaintext_e = ctx.element_from_bytes(&plaintext.to_bytes_le()).unwrap();
 
     // parse randomness
-    let randomness = BigUintX(
-        BigUint::from_str_radix(&choice.randomness, 10).map_err(|_| {
-            BallotError::ParseBigUint(
-                choice.randomness.clone(),
-                String::from("Error parsing randomness"),
-            )
-        })?,
-    );
+    let randomness = BigUint::from_str_radix(&choice.randomness, 10).map_err(|_| {
+        BallotError::ParseBigUint(
+            choice.randomness.clone(),
+            String::from("Error parsing randomness"),
+        )
+    })?;
+    let randomness_e = ctx.exp_from_bytes(&randomness.to_bytes_le()).unwrap();
 
-    // sanity checks
-    /*if !ctx.is_valid_element(&plaintext) {
-        return Err(BallotError::CryptographicCheck(String::from(
-            "Invalid plaintext",
-        )));
-    }*/
     if KeyType::P2048 != public_key.key_type {
         return Err(BallotError::ConsistencyCheck(String::from(
             "Invalid key type",
@@ -65,7 +58,7 @@ fn recreate_encrypt_answer(
     }
 
     // encrypt / create cyphertext
-    let cyphertext = pk.encrypt_with_randomness(&plaintext, &randomness);
+    let cyphertext = pk.encrypt_with_randomness(&plaintext_e, &randomness_e);
 
     // convert to output format
     Ok(CyphertextChoice {
