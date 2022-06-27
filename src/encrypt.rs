@@ -112,7 +112,7 @@ pub fn hash_to(ballot: &Ballot) -> Result<String, BallotError> {
 }
 
 #[cfg(test)]
-mod testes {
+mod tests {
     use crate::ballot::*;
     use crate::encrypt::*;
     use std::fs;
