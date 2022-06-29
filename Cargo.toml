@@ -20,18 +20,22 @@ crate-type = ["cdylib", "rlib"]
 serde = { version = "1.0", features = ["derive"] }
 serde_json = "1.0"
 # wasm
-wasm-bindgen = {version = "0.2", optional = true, features = ['serde-serialize']}
+wasm-bindgen = {version = "0.2", features = ['serde-serialize'], optional = true}
 web-sys = { version = "0.3.4", features = ['Performance'], optional = true}
 cfg-if = "1.0.0"
-# error logging
-console_error_panic_hook = "0.1.7"
 # aes
 ed25519-dalek = {version = "1", features = ["serde"]}
 # hex
 hex = "0.4"
 # rust to json schema
 schemars = "0.8"
+# strand
+strand = { git = "https://github.com/sequentech/strand", rev = "a9fb14beffeca43ad86bd1543624f7978546ff99", features = ['wasmtest']}
+num-bigint = { version = "0.4", features = ["rand"] }
+num-traits = "0.2"
+quick-error = "2.0.0"
 
 [features]
 wasmtest = ["wasm", "dep:web-sys"]
 wasm = ["wasm-bindgen"]
+default = ["wasmtest"]

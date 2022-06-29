@@ -1,147 +1,337 @@
-use ed25519_dalek::{Digest, Sha512};
 use schemars::JsonSchema;
 use serde::{Deserialize, Serialize};
+use wasm_bindgen::prelude::*;
 
-#[derive(Serialize, Deserialize, JsonSchema)]
-pub struct Ballot {
-    cyphertext: Cyphertext,
-    replication: Replication,
-    ballot_hash: String,
-    config: ElectionConfig,
+#[derive(Serialize, Deserialize, JsonSchema, PartialEq, Debug)]
+pub struct AuditableBallot {
+    pub schema_version: SchemaVersion,
+    pub cyphertext: Cyphertext,
+    pub replication: Replication,
+    pub ballot_hash: String,
+    pub config: ElectionConfig,
 }
 
-#[derive(Serialize, Deserialize, JsonSchema)]
+#[wasm_bindgen(typescript_custom_section)]
+const IBALLOT: &'static str = r#"
+interface IBallot {
+    schema_version: ISchemaVersion;
+    cyphertext: ICyphertext;
+    replication: IReplication;
+    ballot_hash: string;
+    config: IElectionConfig;
+}
+"#;
+
+#[wasm_bindgen]
+extern "C" {
+    #[wasm_bindgen(typescript_type = "IBallot")]
+    pub type IBallot;
+}
+
+#[derive(Serialize, Deserialize, JsonSchema, PartialEq, Debug)]
+pub enum SchemaVersion {
+    ALPHA,
+}
+
+#[wasm_bindgen(typescript_custom_section)]
+const SCHEMA_VERSION: &'static str = r#"
+enum ISchemaVersion {
+    ALPHA = "ALPHA",
+}
+"#;
+
+#[wasm_bindgen]
+extern "C" {
+    #[wasm_bindgen(typescript_type = "ISchemaVersion")]
+    pub type ISchemaVersion;
+}
+
+#[derive(Serialize, Deserialize, JsonSchema, PartialEq, Debug)]
 pub struct Cyphertext {
-    issue_date: String,
-    choices: Vec<CyphertextChoice>,
-    proofs: Vec<Proof>,
+    pub issue_date: String,
+    pub choices: Vec<CyphertextChoice>,
 }
 
-#[derive(Serialize, Deserialize, JsonSchema)]
+#[wasm_bindgen(typescript_custom_section)]
+const ICYPHERTEXT: &'static str = r#"
+interface ICyphertext {
+    issue_date: string;
+    choices: Array<ICyphertextChoice>;
+}
+"#;
+
+#[wasm_bindgen]
+extern "C" {
+    #[wasm_bindgen(typescript_type = "ICyphertext")]
+    pub type ICyphertext;
+}
+
+#[derive(Serialize, Deserialize, JsonSchema, PartialEq, Debug)]
 pub struct CyphertextChoice {
-    alpha: String,
-    beta: String,
+    pub gr: String,  // alpha
+    pub mhr: String, // beta
 }
 
-#[derive(Serialize, Deserialize, JsonSchema)]
+#[wasm_bindgen(typescript_custom_section)]
+const ICYPHERTEXT_CHOICE: &'static str = r#"
+interface ICyphertextChoice {
+    gr: string;
+    mhr: string;
+}
+"#;
+
+#[wasm_bindgen]
+extern "C" {
+    #[wasm_bindgen(typescript_type = "ICyphertextChoice")]
+    pub type ICyphertextChoice;
+}
+
+#[derive(Serialize, Deserialize, JsonSchema, PartialEq, Debug)]
 pub struct Replication {
-    choices: Vec<ReplicationChoice>,
+    pub issue_date: String,
+    pub choices: Vec<ReplicationChoice>,
 }
 
-#[derive(Serialize, Deserialize, JsonSchema)]
+#[wasm_bindgen(typescript_custom_section)]
+const IREPLICATION: &'static str = r#"
+interface IReplication {
+    issue_date: string;
+    choices: Array<IReplicationChoice>;
+}
+"#;
+
+#[wasm_bindgen]
+extern "C" {
+    #[wasm_bindgen(typescript_type = "IReplication")]
+    pub type IReplication;
+}
+
+#[derive(Serialize, Deserialize, JsonSchema, PartialEq, Debug)]
 pub struct ReplicationChoice {
-    plaintext: String,
-    randomness: String,
+    pub plaintext: String,
+    pub randomness: String,
 }
 
-#[derive(Serialize, Deserialize, JsonSchema)]
-pub struct Proof {
-    challenge: String,
-    commitment: String,
-    response: String,
+#[wasm_bindgen(typescript_custom_section)]
+const IREPLICATION_CHOICE: &'static str = r#"
+interface IReplicationChoice {
+    plaintext: string;
+    randomness: string;
+}
+"#;
+
+#[wasm_bindgen]
+extern "C" {
+    #[wasm_bindgen(typescript_type = "IReplicationChoice")]
+    pub type IReplicationChoice;
 }
 
-#[derive(Serialize, Deserialize, JsonSchema)]
+#[derive(Serialize, Deserialize, JsonSchema, PartialEq, Debug)]
 pub struct ElectionConfig {
-    date: String,
-    payload: Payload,
+    pub date: String,
+    pub payload: Payload,
 }
 
-#[derive(Serialize, Deserialize, JsonSchema)]
+#[wasm_bindgen(typescript_custom_section)]
+const IELECTION_CONFIG: &'static str = r#"
+interface IElectionConfig {
+    date: string;
+    payload: IPayload;
+}
+"#;
+
+#[wasm_bindgen]
+extern "C" {
+    #[wasm_bindgen(typescript_type = "IElectionConfig")]
+    pub type IElectionConfig;
+}
+
+#[derive(Serialize, Deserialize, JsonSchema, PartialEq, Debug)]
 pub struct Payload {
-    id: i64,
-    configuration: Configuration,
-    state: String,
-    #[serde(rename = "startDate")]
-    start_date: String,
-    #[serde(rename = "endDate")]
-    end_date: String,
-    pks: Vec<Pk>,
+    pub id: i64,
+    pub configuration: Configuration,
+    pub state: String,
+    pub start_date: String,
+    pub end_date: String,
+    pub pks: Vec<Pk>,
 }
 
-#[derive(Serialize, Deserialize, JsonSchema)]
+#[wasm_bindgen(typescript_custom_section)]
+const IPAYLOAD: &'static str = r#"
+interface IPayload {
+    id: number;
+    configuration: IConfiguration;
+    state: string;
+    start_date: string;
+    end_date: string;
+    pks: Array<IPk>;
+}
+"#;
+
+#[wasm_bindgen]
+extern "C" {
+    #[wasm_bindgen(typescript_type = "IPayload")]
+    pub type IPayload;
+}
+
+#[derive(Serialize, Deserialize, JsonSchema, PartialEq, Debug)]
 pub struct Configuration {
-    layout: String,
-    description: String,
-    end_date: String,
-    title: String,
-    start_date: String,
-    director: String,
-    questions: Vec<Question>,
-    authorities: Vec<String>,
-    presentation: Presentation,
-    id: i64,
+    pub layout: String,
+    pub description: String,
+    pub end_date: String,
+    pub title: String,
+    pub start_date: String,
+    pub director: String,
+    pub questions: Vec<Question>,
+    pub authorities: Vec<String>,
+    pub presentation: Presentation,
+    pub id: i64,
 }
 
-#[derive(Serialize, Deserialize, JsonSchema)]
+#[wasm_bindgen(typescript_custom_section)]
+const ICONFIGURATION: &'static str = r#"
+interface IConfiguration {
+    layout: string;
+    description: string;
+    end_date: string;
+    title: string;
+    start_date: string;
+    director: string;
+    questions: Array<IQuestion>;
+    authorities: Array<string>;
+    presentation: IPresentation;
+    id: number;
+}
+"#;
+
+#[wasm_bindgen]
+extern "C" {
+    #[wasm_bindgen(typescript_type = "IConfiguration")]
+    pub type IConfiguration;
+}
+
+#[derive(Serialize, Deserialize, JsonSchema, PartialEq, Debug)]
 pub struct Presentation {
-    theme: String,
-    share_text: String,
-    urls: Vec<Option<serde_json::Value>>,
-    theme_css: String,
+    pub theme: String,
+    pub share_text: String,
+    pub urls: Vec<String>,
+    pub theme_css: String,
 }
 
-#[derive(Serialize, Deserialize, JsonSchema)]
+#[wasm_bindgen(typescript_custom_section)]
+const IPRESENTATION: &'static str = r#"
+interface IPresentation {
+    theme: string;
+    share_text: string;
+    urls: Array<string>;
+    theme_css: string;
+}
+"#;
+
+#[wasm_bindgen]
+extern "C" {
+    #[wasm_bindgen(typescript_type = "IPresentation")]
+    pub type IPresentation;
+}
+
+#[derive(Serialize, Deserialize, JsonSchema, PartialEq, Debug)]
 pub struct Question {
-    layout: String,
-    description: String,
-    min: i64,
-    max: i64,
-    tally_type: String,
-    answers: Vec<Answer>,
-    num_winners: i64,
-    title: String,
-    randomize_answer_order: bool,
-    answer_total_votes_percentage: String,
+    pub layout: String,
+    pub description: String,
+    pub min: i64,
+    pub max: i64,
+    pub tally_type: String,
+    pub answers: Vec<Answer>,
+    pub num_winners: i64,
+    pub title: String,
+    pub randomize_answer_order: bool,
+    pub answer_total_votes_percentage: String,
 }
 
-#[derive(Serialize, Deserialize, JsonSchema)]
+#[wasm_bindgen(typescript_custom_section)]
+const IQUESTION: &'static str = r#"
+interface IQuestion {
+    layout: string;
+    description: string;
+    min: number;
+    max: number;
+    tally_type: string;
+    answers: Array<IAnswer>;
+    num_winners: number;
+    title: string; 
+    randomize_answer_order: boolean;
+    answer_total_votes_percentage: string;
+}
+"#;
+
+#[wasm_bindgen]
+extern "C" {
+    #[wasm_bindgen(typescript_type = "IQuestion")]
+    pub type IQuestion;
+}
+
+#[derive(Serialize, Deserialize, JsonSchema, PartialEq, Debug)]
 pub struct Answer {
-    category: Category,
-    text: String,
-    sort_order: i64,
-    details: String,
-    urls: Vec<Option<serde_json::Value>>,
-    id: i64,
+    pub category: String,
+    pub text: String,
+    pub sort_order: i64,
+    pub details: String,
+    pub urls: Vec<String>,
+    pub id: i64,
 }
 
-#[derive(Serialize, Deserialize, JsonSchema)]
+#[wasm_bindgen(typescript_custom_section)]
+const IANSWER: &'static str = r#"
+interface IAnswer {
+    category: string;
+    text: string;
+    sort_order: number;
+    details: string;
+    urls: Array<string>;
+    id: number;
+}
+"#;
+
+#[wasm_bindgen]
+extern "C" {
+    #[wasm_bindgen(typescript_type = "IAnswer")]
+    pub type IAnswer;
+}
+
+#[derive(Serialize, Deserialize, JsonSchema, PartialEq, Debug)]
 pub struct Pk {
-    q: String,
-    p: String,
-    y: String,
-    g: String,
+    pub key_type: KeyType,
+    pub public_key: String,
 }
 
-#[derive(Serialize, Deserialize, JsonSchema)]
-pub enum Category {
-    #[serde(rename = "Candidaturas no agrupadas")]
-    CandidaturasNoAgrupadas,
+#[wasm_bindgen(typescript_custom_section)]
+const IPK: &'static str = r#"
+interface IPk {
+    key_type: IKeyType;
+    public_key: string;
+}
+"#;
+
+#[wasm_bindgen]
+extern "C" {
+    #[wasm_bindgen(typescript_type = "IPk")]
+    pub type IPk;
 }
 
-pub fn hash_to(ballot: &Ballot) -> String {
-    let ballot_str = serde_json::to_string(&ballot.cyphertext).unwrap();
-    let mut hasher = Sha512::new();
-    hasher.update(ballot_str.as_bytes());
-    let hashed = hasher.finalize();
-    hex::encode(&hashed)
+#[derive(Serialize, Deserialize, JsonSchema, PartialEq, Debug)]
+pub enum KeyType {
+    P2048,
 }
 
-#[cfg(test)]
-mod tests {
-    use crate::ballot::*;
-    use std::fs;
+#[wasm_bindgen(typescript_custom_section)]
+const KEY_TYPE: &'static str = r#"
+enum IKeyType {
+    P2048 = "P2048",
+}
+"#;
 
-    #[test]
-    fn parse_ballot() {
-        let contents = fs::read_to_string("fixtures/ballot.json")
-            .expect("Something went wrong reading the file");
-        let ballot: Ballot = serde_json::from_str(&contents).unwrap();
-        let sha512_ballot = hash_to(&ballot);
-        assert_eq!(&sha512_ballot, &ballot.ballot_hash);
-        assert_eq!(
-            &sha512_ballot,
-            "f2f11a3ad2c03e7dea6d47316e607e4807a18ae064ddf6195fb27a0a180e9168dd9f0f169a352f409e32ee3f89b41a9a21a618a4857788efba13382066aa8df6"
-        )
-    }
+#[wasm_bindgen]
+extern "C" {
+    #[wasm_bindgen(typescript_type = "IKeyType")]
+    pub type IKeyType;
 }
