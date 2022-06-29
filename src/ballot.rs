@@ -3,7 +3,7 @@ use serde::{Deserialize, Serialize};
 use wasm_bindgen::prelude::*;
 
 #[derive(Serialize, Deserialize, JsonSchema, PartialEq, Debug)]
-pub struct Ballot {
+pub struct AuditableBallot {
     pub schema_version: SchemaVersion,
     pub cyphertext: Cyphertext,
     pub replication: Replication,

@@ -30,7 +30,11 @@ fn recreate_encrypt_answer(
             String::from("Error parsing public key"),
         )
     })?;
-    let pk_bigint_e = ctx.element_from_bytes(&pk_bigint.to_bytes_le()).unwrap();
+    let pk_bigint_e = ctx
+        .element_from_bytes(&pk_bigint.to_bytes_le())
+        .map_err(|_| {
+            BallotError::CryptographicCheck(String::from("Error parsing public key as an element"))
+        })?;
     let pk = PublicKey::from_element(&pk_bigint_e, &ctx);
 
     // parse plaintext
@@ -40,7 +44,11 @@ fn recreate_encrypt_answer(
             String::from("Error parsing plaintext"),
         )
     })?;
-    let plaintext_e = ctx.element_from_bytes(&plaintext.to_bytes_le()).unwrap();
+    let plaintext_e = ctx
+        .element_from_bytes(&plaintext.to_bytes_le())
+        .map_err(|_| {
+            BallotError::CryptographicCheck(String::from("Error parsing plaintext as an element"))
+        })?;
 
     // parse randomness
     let randomness = BigUint::from_str_radix(&choice.randomness, 10).map_err(|_| {
@@ -49,7 +57,9 @@ fn recreate_encrypt_answer(
             String::from("Error parsing randomness"),
         )
     })?;
-    let randomness_e = ctx.exp_from_bytes(&randomness.to_bytes_le()).unwrap();
+    let randomness_e = ctx.exp_from_bytes(&randomness.to_bytes_le()).map_err(|_| {
+        BallotError::CryptographicCheck(String::from("Error parsing randomness as an element"))
+    })?;
 
     if KeyType::P2048 != public_key.key_type {
         return Err(BallotError::ConsistencyCheck(String::from(
@@ -67,7 +77,7 @@ fn recreate_encrypt_answer(
     })
 }
 
-pub fn recreate_encrypt_cyphertext(ballot: &Ballot) -> Result<Cyphertext, BallotError> {
+pub fn recreate_encrypt_cyphertext(ballot: &AuditableBallot) -> Result<Cyphertext, BallotError> {
     // check ballot version
     // sanity checks for number of answers/choices
     if ballot.replication.choices.len() != ballot.config.payload.pks.len() {
@@ -94,7 +104,7 @@ pub fn recreate_encrypt_cyphertext(ballot: &Ballot) -> Result<Cyphertext, Ballot
     })
 }
 
-pub fn hash_to(ballot: &Ballot) -> Result<String, BallotError> {
+pub fn hash_to(ballot: &AuditableBallot) -> Result<String, BallotError> {
     let cyphertext = recreate_encrypt_cyphertext(&ballot)?;
     let ballot_str = serde_json::to_string(&cyphertext)
         .map_err(|_| BallotError::Serialization(String::from("Error serializing cyphertext")))?;
@@ -110,7 +120,7 @@ mod tests {
     use crate::encrypt::*;
     use std::fs;
 
-    fn read_ballot_fixture() -> Ballot {
+    fn read_ballot_fixture() -> AuditableBallot {
         let contents = fs::read_to_string("fixtures/ballot.json")
             .expect("Something went wrong reading the file");
         serde_json::from_str(&contents).unwrap()
