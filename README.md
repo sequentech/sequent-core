@@ -1,5 +1,24 @@
 # sequent-core
-Shared code, like ballot encoder-decoder
+
+Sequent shared code. This code might be used in different projects/packages, like the ballot verifier or the voting booth.
+
+Currently this includes:
+ * The structures that represent an auditable ballot.
+ * Methods to generate the ballot cyphertexts.
+ * Methods to generate a hash from a cyphertext.
+
+In the future this repo will also include the ballot encoder-decoder.
+
+# Development environment
+
+sequent-core uses [Nix Package Manager](https://nixos.org/) as its package builder. To build
+new-ballot-verifier, **first [install Nix](https://nixos.org/)** correctly in your system.
+
+After you have installed Nix, enter the development environment with:
+
+```bash
+nix develop
+```
 
 # Generate javascript package
 
