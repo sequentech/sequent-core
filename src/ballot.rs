@@ -1,3 +1,6 @@
+// SPDX-FileCopyrightText: 2022 Felix Robles <felix@sequentech.io>
+//
+// SPDX-License-Identifier: AGPL-3.0-only
 use schemars::JsonSchema;
 use serde::{Deserialize, Serialize};
 use wasm_bindgen::prelude::*;
@@ -28,6 +31,7 @@ extern "C" {
     pub type IBallot;
 }
 
+#[allow(clippy::upper_case_acronyms)]
 #[derive(Serialize, Deserialize, JsonSchema, PartialEq, Debug)]
 pub enum SchemaVersion {
     ALPHA,
