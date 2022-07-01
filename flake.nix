@@ -45,6 +45,7 @@
                 pkgs.wasm-bindgen-cli
                 pkgs.libiconv
                 pkgs.yarn
+                pkgs.reuse
             ];
           };
           # sequent-core is the default package
