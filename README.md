@@ -5,6 +5,13 @@ SPDX-License-Identifier: AGPL-3.0-only
 -->
 # sequent-core
 
+[![Slack][slack-badge]][slack-link]
+[![Build Status][build-badge]][build-link]
+[![codecov][codecov-badge]][codecov-link]
+[![Dependency status][dependencies-badge]][dependencies-link]
+[![License][license-badge]][license-link]
+[![REUSE][reuse-badge]][reuse-link]
+
 Sequent shared code. This code might be used in different projects/packages, like the ballot verifier or the voting booth.
 
 Currently this includes:
@@ -59,3 +66,21 @@ information (in master branch) to [codecov].
 1. **License compliance**: Check using [REUSE] for license compliance within
 the project, verifying that every file is REUSE-compliant and thus has a 
 copyright notice header.
+
+
+[slack-badge]: https://img.shields.io/badge/Join_us_on_Slack!-sequent--talk-blue.svg?longCache=true&logo=slack
+[slack-link]: https://join.slack.com/t/sequentech/shared_invite/zt-1bve9z0px-IF4Je04NJM8AEkCAcdBVWg
+
+[build-badge]: https://github.com/sequentech/sequent-core/workflows/CI/badge.svg?branch=master&event=push
+[build-link]: https://github.com/sequentech/sequent-core/actions?query=workflow%3ACI
+
+
+[codecov-badge]: https://codecov.io/gh/sequentech/sequent-core/branch/master/graph/badge.svg
+[codecov-link]: https://codecov.io/
+
+[dependencies-badge]: https://deps.rs/repo/github/sequentech/sequent-core/status.svg
+[dependencies-link]: https://deps.rs/repo/github/sequentech/sequent-core
+[license-badge]: https://img.shields.io/github/license/sequentech/sequent-core?label=license
+[license-link]: https://github.com/sequentech/sequent-core/blob/master/LICENSE
+[reuse-badge]: https://api.reuse.software/badge/github.com/sequentech/sequent-core
+[reuse-link]: https://api.reuse.software/info/github.com/sequentech/sequent-core
