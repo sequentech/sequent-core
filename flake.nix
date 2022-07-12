@@ -1,4 +1,4 @@
-# SPDX-FileCopyrightText: 2021 Eduardo Robles <edulix@sequentech.io>
+# SPDX-FileCopyrightText: 2022 Felix Robles <felix@sequentech.io>
 #
 # SPDX-License-Identifier: AGPL-3.0-only
 
@@ -20,36 +20,74 @@
           pkgs = import nixpkgs {
             inherit system overlays;
           };
-          rust-nightly = pkgs
+          configureRustTargets = targets : pkgs
             .rust-bin
-            .selectLatestNightlyWith(
-              toolchain: toolchain.default.override {
+            .nightly
+            ."2022-04-07"
+            .default
+            .override {
                 extensions = [ "rust-src" ];
-                targets = [ "wasm32-unknown-unknown" ];
-              }
-            );
+                ${if (builtins.length targets) > 0 then "targets" else null} = targets;
+
+            };
+          rust-wasm = configureRustTargets [ "wasm32-unknown-unknown" ];
+          rust-system  = configureRustTargets [];
+
+          # see https://github.com/NixOS/nixpkgs/blob/master/doc/languages-frameworks/rust.section.md#importing-a-cargolock-file-importing-a-cargolock-file
+          cargoPatches = {
+              cargoLock = let
+                  fixupLockFile = path: (builtins.readFile path);
+              in {
+                lockFileContents = fixupLockFile ./Cargo.lock.copy;
+                  outputHashes = {
+                  "strand-0.1.0" = "sha256-9EERxLvRrFLqaMC4qEbSsOnjWFUTNycPzOv0nW46Pog=";
+                };
+              };
+              postPatch = ''
+                  cp ${./Cargo.lock.copy} Cargo.lock
+              '';
+          };
+          buildRustPackageWithCargo = cargoArgs: pkgs.rustPlatform.buildRustPackage (cargoPatches // cargoArgs);
 
         # resulting packages of the flake
         in rec {
-          # WIP Derivation for sequent-core
-          # Continue work here following https://srid.ca/rust-nix reference
-          packages.sequent-core = pkgs.clangStdenv.mkDerivation {
-            name = "sequent-core";
+          packages.sequent-core-wasm = buildRustPackageWithCargo {
+            pname = "sequent-core-wasm";
             version = "0.0.1";
-            src = self;
-            type = "git"; 
-            submodules = "true";
+            src = ./.;
             nativeBuildInputs = [
-                rust-nightly
-                pkgs.wasm-pack
-                pkgs.wasm-bindgen-cli
-                pkgs.libiconv
-                pkgs.yarn
-                pkgs.reuse
+              rust-wasm
+              pkgs.nodePackages.npm
+              pkgs.wasm-pack
+              pkgs.wasm-bindgen-cli
+              pkgs.libiconv
+              pkgs.reuse
+            ];
+            buildPhase = ''
+              echo 'Build: wasm-pack build'
+              wasm-pack build --mode no-install --out-name index --release --target web --features=wasmtest
+            '';
+            installPhase = "
+              # set HOME temporarily to fix npm pack
+              mkdir -p $out/temp_home
+              export HOME=$out/temp_home
+              echo 'Install: wasm-pack pack'
+              wasm-pack -v pack .
+              rm -Rf $out/temp_home
+              cp pkg/sequent-core-*.tgz $out
+              ";
+          };
+
+          packages.sequent-core-lib = buildRustPackageWithCargo {
+            pname = "sequent-core-lib";
+            version = "0.0.1";
+            src = ./.;
+            nativeBuildInputs = [
+              rust-system
             ];
           };
           # sequent-core is the default package
-          defaultPackage = packages.sequent-core;
+          defaultPackage = packages.sequent-core-wasm;
 
           # configure the dev shell
           devShell = (

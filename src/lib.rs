@@ -9,3 +9,7 @@ pub mod ballot;
 pub use ballot::*;
 pub mod encrypt;
 pub mod util;
+
+/// Webassembly API.
+#[cfg(feature = "wasm")]
+pub mod wasm;
