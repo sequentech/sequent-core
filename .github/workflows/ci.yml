@@ -114,21 +114,21 @@ jobs:
           name: code-coverage-report
           path: cobertura.xml
       
-  # check dependencies
-  # based on https://github.com/EmbarkStudios/cargo-deny-action
-  #dependencies:
-  #  name: Dependencies
-  #  runs-on: ubuntu-latest
-  #  steps:
-  #    - name: Checkout repository
-  #      uses: actions/checkout@v2
-  #
-  #    - name: Run cargo deny
-  #      uses: EmbarkStudios/cargo-deny-action@v1
-  #      with:
-  #        log-level: warn
-  #        command: check
-  #        arguments: --all-features
+  dependencies:
+    name: Check Dependencies
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - uses: Swatinem/rust-cache@v1
+
+      - name: Run cargo deny
+        uses: EmbarkStudios/cargo-deny-action@v1
+        with:
+          log-level: warn
+          command: check
+          arguments: --all-features
 
   license_reuse:
     runs-on: ubuntu-latest
