@@ -94,7 +94,7 @@
             pkgs.mkShell.override { stdenv = pkgs.clangStdenv; }
           ) { 
             buildInputs = 
-              packages.sequent-core.nativeBuildInputs ++
+              packages.sequent-core-wasm.nativeBuildInputs ++
               [ pkgs.bash ]; 
           };
         }
