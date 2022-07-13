@@ -4,7 +4,6 @@
 
 name: update-flake-lock
 on:
-  push:
   workflow_dispatch: # allows manual triggering
   schedule:
     # minute, hour, day of month, month, day of week
