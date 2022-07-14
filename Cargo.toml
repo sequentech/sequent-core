@@ -30,12 +30,12 @@ hex = "0.4"
 # rust to json schema
 schemars = "0.8"
 # strand
-strand = { git = "https://github.com/sequentech/strand", rev = "a9fb14beffeca43ad86bd1543624f7978546ff99", features = ['wasmtest']}
+strand = { git = "https://github.com/sequentech/strand", rev = "ff13f9077874c82b126ae4e3593b6863ada346c7" }
 num-bigint = { version = "0.4", features = ["rand"] }
 num-traits = "0.2"
 quick-error = "2.0.0"
 
 [features]
-wasmtest = ["wasm", "dep:web-sys"]
+wasmtest = ["wasm", "dep:web-sys", "strand/wasmtest"]
 wasm = ["wasm-bindgen"]
-default = ["wasmtest"]
+default = []

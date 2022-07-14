@@ -1,3 +1,6 @@
+// SPDX-FileCopyrightText: 2022 Felix Robles <felix@sequentech.io>
+//
+// SPDX-License-Identifier: AGPL-3.0-only
 use crate::ballot::*;
 use ed25519_dalek::{Digest, Sha512};
 use num_bigint::BigUint;
@@ -105,7 +108,7 @@ pub fn recreate_encrypt_cyphertext(ballot: &AuditableBallot) -> Result<Cyphertex
 }
 
 pub fn hash_to(ballot: &AuditableBallot) -> Result<String, BallotError> {
-    let cyphertext = recreate_encrypt_cyphertext(&ballot)?;
+    let cyphertext = recreate_encrypt_cyphertext(ballot)?;
     let ballot_str = serde_json::to_string(&cyphertext)
         .map_err(|_| BallotError::Serialization(String::from("Error serializing cyphertext")))?;
     let mut hasher = Sha512::new();
