@@ -39,9 +39,21 @@ nix develop
     rustup run nightly-2022-04-07 wasm-pack pack .
 
 
-# Run tests
+# Run rust tests
+
+To run rust tests:
 
     cargo test
+
+# Browserstack tests
+
+To run browserstack tests:
+
+    python3 src/wasm/test/serve.py
+
+On another terminal, run this, previously configuring the env vars:
+
+    BROWSERSTACK_USERNAME=$BROWSERSTACK_USERNAME BROWSERSTACK_ACCESS_KEY=$BROWSERSTACK_ACCESS_KEY npm run local
 
 # Generate JSON schema
 
