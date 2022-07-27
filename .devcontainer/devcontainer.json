@@ -11,7 +11,7 @@
 	//"updateRemoteUserUID": false,
   
 	// build development environment on creation
-	"onCreateCommand": "nix develop --command bash -c 'nix build -vv -L && echo done building nix dev environment'",
+	"onCreateCommand": "nix develop --command bash -c 'nix build -vv -L && echo done building nix dev environment' || true",
   
 	// Add the IDs of extensions you want installed when the container is created.
 	"extensions": [
@@ -19,8 +19,9 @@
 	  "arrterian.nix-env-selector",
 	  // extra extensions
 	  "jnoortheen.nix-ide",
-	  "rust-lang.rust",
+	  "rust-lang.rust-analyzer",
 	  "yzhang.markdown-all-in-one",
-	  "bungcip.better-toml"
+	  "bungcip.better-toml",
+	  "vadimcn.vscode-lldb"
 	]
   }

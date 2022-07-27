@@ -18,6 +18,7 @@ RUN apt -y install --no-install-recommends \
     vim-tiny \
     nano \
     curl \
+    clang \
     git \
     ssh \
     direnv \
@@ -38,9 +39,6 @@ RUN echo "en_US.UTF-8 UTF-8" >> /etc/locale.gen && locale-gen
 ARG USERNAME=vscode
 RUN echo $USERNAME ALL=\(root\) NOPASSWD:ALL > /etc/sudoers.d/devcontainer && \
     chmod 0440 /etc/sudoers.d/devcontainer
-
-# Install Rust
-RUN curl -y --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
 
 # copy nix configuration
 COPY etc/nix.conf /etc/nix/nix.conf
@@ -65,5 +63,8 @@ ENV DIRENV_CONFIG=/etc
 
 USER ${USERNAME}
 
+# Install Rust
+RUN curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
+
 # cache /nix
-# VOLUME /nix
+VOLUME /nix
