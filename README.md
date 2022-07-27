@@ -86,11 +86,15 @@ issues that appear.
 4. **Code linting**: Lint that checks for common Rust mistakes using 
 `cargo clippy`. You can try to fix automatically most of those mistakes using
 `cargo clippy --fix -Z unstable-options`.
-5. **Code coverage**: Detects code coverage with [grcov] and pushes the 
+5. **Code coverage**: Detects code coverage with [cargo-tarpaulin] and pushes the 
 information (in master branch) to [codecov].
-1. **License compliance**: Check using [REUSE] for license compliance within
+6. **License compliance**: Check using [REUSE] for license compliance within
 the project, verifying that every file is REUSE-compliant and thus has a 
 copyright notice header. Try fixing it with `reuse lint`.
+7. **Dependencies scan**: Audit dependencies for security vulnerabilities in the
+[RustSec Advisory Database], unmaintained dependencies, incompatible licenses
+and banned packages using [cargo-deny]. Use `cargo deny --all-features check` to try to solve the detected issues. We also
+have configured [dependabot] to notify and create PRs on version updates.
 
 
 [slack-badge]: https://img.shields.io/badge/Join_us_on_Slack!-sequent--talk-blue.svg?longCache=true&logo=slack
@@ -109,3 +113,10 @@ copyright notice header. Try fixing it with `reuse lint`.
 [license-link]: https://github.com/sequentech/sequent-core/blob/master/LICENSE
 [reuse-badge]: https://api.reuse.software/badge/github.com/sequentech/sequent-core
 [reuse-link]: https://api.reuse.software/info/github.com/sequentech/sequent-core
+
+[cargo-deny]: https://github.com/EmbarkStudios/cargo-deny
+[RustSec Advisory Database]: https://github.com/RustSec/advisory-db/
+[codecov]: https://codecov.io/
+[REUSE]: https://reuse.software/
+[dependabot]:https://docs.github.com/en/code-security/dependabot/dependabot-version-updates/configuring-dependabot-version-updates
+[cargo-tarpaulin]: https://github.com/xd009642/tarpaulin

@@ -100,7 +100,7 @@
             nativeBuildInputs = 
               defaultPackage.nativeBuildInputs; 
             buildInputs = 
-              [ pkgs.bash pkgs.reuse ]; 
+              [ pkgs.bash pkgs.reuse pkgs.cargo-deny ]; 
           };
         }
     );
