@@ -21,10 +21,23 @@ Currently this includes:
 
 In the future this repo will also include the ballot encoder-decoder.
 
-# Development environment
+## Development environment
+
+Strand uses [Github dev containers] to facilitate development. To start developing strand,
+clone the github repo locally, and open the folder in Visual Studio Code in a container. This
+will configure the same environment that strand developers use, including installing required
+packages and VS Code plugins.
+
+We've tested this dev container for Linux x86_64 and Mac Os arch64 architectures. Unfortunately
+at the moment it doesn't work with Github Codespaces as nix doesn't work on Github Codespaces yet.
+Also the current dev container configuration for strand doesn't allow commiting to the git repo
+from the dev container, you should use git on a local terminal.
+
+## Nix reproducible builds
 
 sequent-core uses [Nix Package Manager](https://nixos.org/) as its package builder. To build
-new-ballot-verifier, **first [install Nix](https://nixos.org/)** correctly in your system.
+new-ballot-verifier, **first [install Nix](https://nixos.org/)** correctly in your system. If you're
+running the project on a dev container, you shouldn't need to install it.
 
 After you have installed Nix, enter the development environment with:
 
@@ -32,20 +45,20 @@ After you have installed Nix, enter the development environment with:
 nix develop
 ```
 
-# Generate javascript package
+## Generate javascript package
 
     export RUSTFLAGS='-C target-feature=+atomics,+bulk-memory,+mutable-globals'
     rustup run nightly-2022-04-07 wasm-pack build --out-name index --release --target web --features=wasmtest -- -Z build-std=panic_abort,std
     rustup run nightly-2022-04-07 wasm-pack pack .
 
 
-# Run rust tests
+## Run rust tests
 
 To run rust tests:
 
     cargo test
 
-# Browserstack tests
+## Browserstack tests
 
 To run browserstack tests:
 
@@ -55,7 +68,7 @@ On another terminal, run this, previously configuring the env vars:
 
     BROWSERSTACK_USERNAME=$BROWSERSTACK_USERNAME BROWSERSTACK_ACCESS_KEY=$BROWSERSTACK_ACCESS_KEY npm run local
 
-# Generate JSON schema
+## Generate JSON schema
 
     cargo build --release
     ./target/release/sequent-core > ballot-schema.json
@@ -73,11 +86,15 @@ issues that appear.
 4. **Code linting**: Lint that checks for common Rust mistakes using 
 `cargo clippy`. You can try to fix automatically most of those mistakes using
 `cargo clippy --fix -Z unstable-options`.
-5. **Code coverage**: Detects code coverage with [grcov] and pushes the 
+5. **Code coverage**: Detects code coverage with [cargo-tarpaulin] and pushes the 
 information (in master branch) to [codecov].
-1. **License compliance**: Check using [REUSE] for license compliance within
+6. **License compliance**: Check using [REUSE] for license compliance within
 the project, verifying that every file is REUSE-compliant and thus has a 
-copyright notice header.
+copyright notice header. Try fixing it with `reuse lint`.
+7. **Dependencies scan**: Audit dependencies for security vulnerabilities in the
+[RustSec Advisory Database], unmaintained dependencies, incompatible licenses
+and banned packages using [cargo-deny]. Use `cargo deny --all-features check` to try to solve the detected issues. We also
+have configured [dependabot] to notify and create PRs on version updates.
 
 
 [slack-badge]: https://img.shields.io/badge/Join_us_on_Slack!-sequent--talk-blue.svg?longCache=true&logo=slack
@@ -96,3 +113,10 @@ copyright notice header.
 [license-link]: https://github.com/sequentech/sequent-core/blob/master/LICENSE
 [reuse-badge]: https://api.reuse.software/badge/github.com/sequentech/sequent-core
 [reuse-link]: https://api.reuse.software/info/github.com/sequentech/sequent-core
+
+[cargo-deny]: https://github.com/EmbarkStudios/cargo-deny
+[RustSec Advisory Database]: https://github.com/RustSec/advisory-db/
+[codecov]: https://codecov.io/
+[REUSE]: https://reuse.software/
+[dependabot]:https://docs.github.com/en/code-security/dependabot/dependabot-version-updates/configuring-dependabot-version-updates
+[cargo-tarpaulin]: https://github.com/xd009642/tarpaulin
