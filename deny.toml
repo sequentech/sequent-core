@@ -115,6 +115,7 @@ exceptions = [
     # @edulix: Actually these two packages are alternatively licensed, so even 
     # if cargo deny detects them as GPL AND LGPL, it's GPL OR LGPL. And we allow
     # LGPL. That's why they are added here as exceptions.
+    { allow = ["Unicode-DFS-2016"], name = "unicode-ident", version = "*" },
     # This is our own package, so we don't mind its license :-)
     { allow = ["AGPL-3.0"], name = "sequent-core" },
     # This is another Sequent package
