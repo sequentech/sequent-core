@@ -9,9 +9,13 @@
   inputs.rust-overlay.url = "github:oxalica/rust-overlay";
   inputs.nixpkgs.url = "github:NixOS/nixpkgs/nixos-22.05";
   inputs.flake-utils.url = "github:numtide/flake-utils";
+  inputs.flake-compat = {
+    url = "github:edolstra/flake-compat";
+    flake = false;
+  };
 
   # output function of this flake
-  outputs = { self, nixpkgs, flake-utils, rust-overlay }:
+  outputs = { self, nixpkgs, flake-utils, rust-overlay, flake-compat }:
     flake-utils.lib.eachDefaultSystem (
       system:
         let 
@@ -58,10 +62,10 @@
             nativeBuildInputs = [
               rust-wasm
               pkgs.nodePackages.npm
+              pkgs.binaryen
               pkgs.wasm-pack
               pkgs.wasm-bindgen-cli
               pkgs.libiconv
-              pkgs.reuse
             ];
             buildPhase = ''
               echo 'Build: wasm-pack build'
@@ -93,9 +97,10 @@
           devShell = (
             pkgs.mkShell.override { stdenv = pkgs.clangStdenv; }
           ) { 
+            nativeBuildInputs = 
+              defaultPackage.nativeBuildInputs; 
             buildInputs = 
-              packages.sequent-core-wasm.nativeBuildInputs ++
-              [ pkgs.bash ]; 
+              [ pkgs.bash pkgs.reuse ]; 
           };
         }
     );
